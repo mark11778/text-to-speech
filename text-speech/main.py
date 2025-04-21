@@ -1,13 +1,16 @@
 import tkinter as tk
 from tkinter import filedialog, ttk
 import pyttsx3
-import PyPDF2
 import threading
+from pdf2image import convert_from_path
+import pytesseract
+import os
+import tempfile
 
 class PDFReaderApp:
     def __init__(self, root):
         self.root = root
-        self.root.title("PDF Text-to-Speech Reader")
+        self.root.title("PDF OCR Text-to-Speech Reader")
 
         self.engine = pyttsx3.init()
         self.playing = False
@@ -51,14 +54,19 @@ class PDFReaderApp:
             return
 
         try:
-            with open(file_path, 'rb') as f:
-                reader = PyPDF2.PdfReader(f)
+            print("Converting PDF to images for OCR...")
+            with tempfile.TemporaryDirectory() as tempdir:
+                images = convert_from_path(file_path, dpi=300)
                 self.text_content = ""
-                for page in reader.pages:
-                    self.text_content += page.extract_text()
-            print("PDF loaded successfully.")
+                for i, image in enumerate(images):
+                    text = pytesseract.image_to_string(image)
+                    self.text_content += text + "\n"
+                    print(f"Processed page {i+1}")
+
+            print("OCR completed.")
+            print(f"Extracted text:\n{self.text_content[:1000]}...")  # preview first 1000 chars
         except Exception as e:
-            print("Error:", e)
+            print("Error during OCR:", e)
 
     def update_volume(self, val):
         self.engine.setProperty('volume', float(val))
