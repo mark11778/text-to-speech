@@ -6,6 +6,7 @@ from pdf2image import convert_from_path
 import pytesseract
 import os
 import tempfile
+import time
 
 class PDFReaderApp:
     def __init__(self, root):
@@ -52,7 +53,7 @@ class PDFReaderApp:
         file_path = filedialog.askopenfilename(filetypes=[("PDF Files", "*.pdf")])
         if not file_path:
             return
-
+        start = time.time()
         try:
             print("Converting PDF to images for OCR...")
             with tempfile.TemporaryDirectory() as tempdir:
@@ -64,7 +65,9 @@ class PDFReaderApp:
                     print(f"Processed page {i+1}")
 
             print("OCR completed.")
-            print(f"Extracted text:\n{self.text_content[:1000]}...")  # preview first 1000 chars
+            end = time.time()
+            print(f"time elapsed: {(end - start)}")
+            print(f"Extracted text:\n{self.text_content}")
         except Exception as e:
             print("Error during OCR:", e)
 
