@@ -19,27 +19,22 @@ class PDFReaderApp:
 
         self.text_content = ""
 
-        # UI Layout
         self.build_gui()
 
     def build_gui(self):
-        # Load PDF Button
         load_btn = ttk.Button(self.root, text="Load PDF", command=self.load_pdf)
         load_btn.pack(pady=10)
 
-        # Volume Slider
         self.volume_slider = tk.Scale(self.root, from_=0, to=1, resolution=0.1,
                                       orient=tk.HORIZONTAL, label="Volume", command=self.update_volume)
         self.volume_slider.set(0.5)
         self.volume_slider.pack(padx=20, pady=5)
 
-        # Speed Slider
         self.speed_slider = tk.Scale(self.root, from_=100, to=300,
                                      orient=tk.HORIZONTAL, label="Speed (WPM)", command=self.update_speed)
         self.speed_slider.set(150)
         self.speed_slider.pack(padx=20, pady=5)
 
-        # Control Buttons
         controls = tk.Frame(self.root)
         controls.pack(pady=10)
 
