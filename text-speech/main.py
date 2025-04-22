@@ -11,7 +11,7 @@ import time
 class PDFReaderApp:
     def __init__(self, root):
         self.root = root
-        self.root.title("PDF OCR Text-to-Speech Reader")
+        self.root.title("PDF Text-to-Speech Reader")
 
         self.engine = pyttsx3.init()
         self.playing = False
@@ -48,9 +48,7 @@ class PDFReaderApp:
         file_path = filedialog.askopenfilename(filetypes=[("PDF Files", "*.pdf")])
         if not file_path:
             return
-        start = time.time()
         try:
-            print("Converting PDF to images for OCR...")
             with tempfile.TemporaryDirectory() as tempdir:
                 images = convert_from_path(file_path, dpi=300)
                 self.text_content = ""
@@ -59,10 +57,6 @@ class PDFReaderApp:
                     self.text_content += text + "\n"
                     print(f"Processed page {i+1}")
 
-            print("OCR completed.")
-            end = time.time()
-            print(f"time elapsed: {(end - start)}")
-            print(f"Extracted text:\n{self.text_content}")
         except Exception as e:
             print("Error during OCR:", e)
 
